@@ -14,16 +14,16 @@
       </div>
     
     
-        <div class="row row-cols m-2">
+        <div class="row row-cols m-2 ">
 
         <% blogs.forEach((blog)=>{ %>
 
             <div class="col">
                 <div class="card" style="width: 24rem;">
-                    <img src="<%= blog.image %>" class="card-img-top" alt="...">
+                    <img src="<%= blog.ImageUrl %>" class="card-img-top" alt="...">
                     <div class="card-body">
-                      <h5 class="card-title"><%= blog.name %></h5>
-                      <p class="card-text"><%= blog.description %></p>
+                      <h5 class="card-title"><%= blog.ImageName %></h5>
+                      <p class="card-text"><%= blog.ImageDetails %></p>
                       <div class="d-grid gap-2 col-12 mx-auto">
                         <a  href="/blogs/<%= blog._id %>" class="btn btn-info" type="button">More Info</a>
                         </div>
@@ -33,12 +33,26 @@
     
             <% }); %>
 
-    </div>
+
+          
+          </div>
+
+          <div class="pagination">
+            <a href="">prev</a>
+            <a href="" class="myPB">1</a>
+            <a href="" class="myPB">2</a>
+            <a href="" class="myPB">3</a>
+            <a href="" class="myPB">4</a>
+            <a href="" class="myPB">5</a>
+            <a href="">next</a>
+          </div>
+
+          
 </div>
 
 
 
-   
+<script src="../../public/script.js"></script>
 
 
 <%- include('../partials/footer'); -%>

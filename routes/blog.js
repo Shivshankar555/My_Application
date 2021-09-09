@@ -23,21 +23,20 @@ router.get("/blogs",(req,res)=>{
 
 
 // CREATE --> add new blog to the list
-router.post("/blogs",urlencodedParser,isLoggedIn,(req,res)=>{
+router.post("/blogs",urlencodedParser,(req,res)=>{
     // get data from FORM and add to the DB
-    const name = req.body.name;
-    const image = req.body.image;
-    const description = req.body.description;
-    const author = {
-        id: req.user._id,
-        username: req.user.username
-    }
+    const ImageName = req.body.ImageName;
+    const ImageUrl = req.body.ImageUrl;
+    const ImageDetails = req.body.ImageDetails;
+    
+
     const newBlog = {
-        name: name,
-        image: image,
-        description: description,
-        author:author
+        ImageName: ImageName,
+        ImageUrl: ImageUrl,
+        ImageDetails: ImageDetails
+        
     };
+
     // create new blog and save to DB
     Blog.create(newBlog,(err,blog)=>{
         if(err){
@@ -52,7 +51,7 @@ router.post("/blogs",urlencodedParser,isLoggedIn,(req,res)=>{
 });
 
 // NEW --> show form to add new blog to the existing list.
-router.get("/new/blogs",isLoggedIn,(req,res)=>{
+router.get("/new/blogs",(req,res)=>{
     res.render("blog/new");
 });
 
@@ -72,7 +71,7 @@ router.get("/blogs/:id",(req,res)=>{
 });
 
 // EDIT EXISTING BLOG ROUTE
-router.get("/blogs/:id/edit",urlencodedParser,checkOwnership,(req,res)=>{
+router.get("/blogs/:id/edit",urlencodedParser,(req,res)=>{
     Blog.findById(req.params.id,(err,foundBlog)=>{
        res.render("blog/edit",{blog:foundBlog});
       });
@@ -80,14 +79,16 @@ router.get("/blogs/:id/edit",urlencodedParser,checkOwnership,(req,res)=>{
 });
 
 // UPDATE EXISTING blog ROUTE
-router.put("/blogs/:id",urlencodedParser,checkOwnership,(req,res)=>{
+router.put("/blogs/:id",urlencodedParser,(req,res)=>{
     Blog.findByIdAndUpdate(
-        req.params,
+        req.params.id,
         req.body.blog,
         (err,updatedblog)=>{
     if(err){
+        console.log(err);
         res.redirect("/blogs")
     }else{
+        console.log(updatedblog);
         res.redirect("/blogs/"+ req.params.id);
     }
    });
@@ -95,7 +96,7 @@ router.put("/blogs/:id",urlencodedParser,checkOwnership,(req,res)=>{
 
 // deleting a particular blog
 
-router.delete("/blogs/:id",urlencodedParser,checkOwnership,(req,res)=>{
+router.delete("/blogs/:id",urlencodedParser,(req,res)=>{
     Blog.findByIdAndDelete(req.params.id,(err)=>{
         if(err){
             res.redirect("/blogs");
@@ -104,41 +105,5 @@ router.delete("/blogs/:id",urlencodedParser,checkOwnership,(req,res)=>{
         }
     });
 });
-
-function checkOwnership(req, res, next) {
-    if(req.isAuthenticated()){
-        Blog.findById(req.params.id,(err, foundBlog)=>{
-              if(err){
-                  req.flash("error","Blog not found.");
-                  res.redirect("back");
-              }  else {
-                  // does user own the campground?
-                  console.log(foundBlog);
-                  console.log(foundBlog.author);
-               if(foundBlog.author.id.equals(req.user._id)) {
-                   next();
-               } else {
-                   req.flash("error","permission denied!");
-                   res.redirect("back");
-               }
-              }
-           });
-       } else {
-           req.flash("error","please login first!");
-           res.redirect("back");
-       }
-     }
-   
-
-
-
-function isLoggedIn(req, res, next){
-    if(req.isAuthenticated()){
-        return next();
-    }
-    req.flash("error","Please login first!");
-    res.redirect("/login");
-}
-
 
 module.exports = router;

@@ -1,18 +1,18 @@
 <%- include ('../partials/header'); %>
 
 <div class="container m-5">
-    <h1 class = "mb-3" style="text-align: center;">Edit <%= blog.name %></h1>
+    <h1 class = "mb-3" style="text-align: center;">Edit <%= blog.ImageName %></h1>
 
     <div >
         <form action="/blogs/<%= blog._id %>?_method=PUT" method="POST">
             <div class="form-group myForm">
-                <input class="form-control" type="text" name="blog[name]" placeholder="name" value="<%= blog.name %>">
+                <input class="form-control" type="text" name="blog[ImageName]" placeholder="name" value="<%= blog.ImageName %>">
             </div>
             <div class="form-group myForm">
-                <input class="form-control" type="text" name="blog[image]" placeholder="image url" value="<%= blog.image %>">
+                <input class="form-control" type="text" name="blog[ImageUrl]" placeholder="image url" value="<%= blog.ImageUrl %>">
             </div>
             <div class="form-group myForm">
-                <textarea class="form-control exampleFormControlTextarea1" placeholder="description" type="text" name="blog[description]" value="<%= blog.description %>"></textarea>
+                <textarea class="form-control exampleFormControlTextarea1" placeholder="description" type="text" name="blog[ImageDetails]" value="<%= blog.ImageDetails %>"></textarea>
             </div>
             <div class="form-group myForm">
                 <button class=" btn btn-warning btn-block">Update Blog</button>
